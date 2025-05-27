@@ -1,7 +1,6 @@
 pipeline {
     agent any
 
-    // Parameters to specify branch (optional)
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
     }
@@ -9,7 +8,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from the specified branch
                 git branch: "${params.BRANCH_NAME}",
                     url: 'https://github.com/avinashshrimal/monk'
             }
@@ -17,18 +15,23 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Example: run build commands (e.g. Maven, Gradle, npm)
-                // Replace with your project's build tool
                 echo 'Building the project...'
-                sh './build.sh' // Or e.g. 'mvn clean install'
+                // If you have a build.bat script in repo root:
+                bat 'build.bat'
+                
+                // Or if you build with a command like Maven, uncomment this:
+                // bat 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
-                // Example: run test commands
                 echo 'Running tests...'
-                sh './test.sh' // Or e.g. 'mvn test'
+                // If you have a test.bat script:
+                bat 'test.bat'
+
+                // Or run your test command directly, e.g.:
+                // bat 'mvn test'
             }
         }
     }
